@@ -1,5 +1,7 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+const Migrations = artifacts.require("./Migrations");
+const PropertyOwnership = artifacts.require("./PropertyOwnership");
 
 module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
+  deployer.deploy(Migrations);
+  deployer.deploy(PropertyOwnership);
 };
