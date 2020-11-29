@@ -3037,56 +3037,9 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {
-    "5777": {
-      "events": {
-        "0xa727a1764d2a59ad49285e556bdc23946105b4afa3c7507243ddbeb6f5c6f7f9": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "propertyId",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "price",
-              "type": "uint256"
-            }
-          ],
-          "name": "NewProperty",
-          "type": "event"
-        },
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x6F3631fD7B70bF4C67B30bBa991f02Df13B505cd",
-      "transactionHash": "0x8e8f53dae8834429d101ea6d58bc47ca86f55b7395bee35ba09c74b20874734f"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-29T19:14:41.187Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-11-29T20:49:03.153Z",
   "devdoc": {
     "methods": {
       "ownable()": {

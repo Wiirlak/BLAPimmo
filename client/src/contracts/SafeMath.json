@@ -7254,17 +7254,9 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {
-    "5777": {
-      "events": {},
-      "links": {},
-      "address": "0xaf4E074c0905E5C99b0bF674C27a0FB3ec0C8174",
-      "transactionHash": "0x281e1c8c342808110cd4d523139a9f5897fbae5a2a4ae9dcc4088d782759dc1f"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-29T19:14:41.195Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-11-29T20:49:03.157Z",
   "devdoc": {
     "details": "Math operations with safety checks that throw on error",
     "methods": {},
