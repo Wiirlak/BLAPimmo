@@ -1,34 +1,12 @@
 import React, {Component} from "react";
-import getWeb3 from "./getWeb3";
-import PropertyOwnershipContract from "./contracts/PropertyOwnership.json";
 
 class Default extends Component {
     state = {storageValue: 0, web3: null, accounts: null, contract: null};
 
     componentDidMount = async () => {
-        try {
-            // Get network provider and web3 instance.
-            const web3 = await getWeb3();
-
-            // Use web3 to get the user's accounts.
-            const accounts = await web3.eth.getAccounts();
-
-            // Get the contract instance.
-            const networkId = await web3.eth.net.getId();
-            const deployedNetwork = PropertyOwnershipContract.networks[networkId];
-            const instance = new web3.eth.Contract(
-                PropertyOwnershipContract.abi,
-                deployedNetwork && deployedNetwork.address,
-            );
-            this.setState({web3, accounts, contract: instance}, this.runExample);
-
-        } catch (error) {
-            // Catch any errors for any of the above operations.
-            alert(
-                `Failed to load web3, accounts, or contract. Check console for details.`,
-            );
-            console.error(error);
-        }
+        this.rap = this.props.data3
+        console.log('v')
+        // await this.runExample()
     };
 
     runExample = async () => {
@@ -42,7 +20,7 @@ class Default extends Component {
     };
 
     render() {
-        if (!this.state.web3) {
+        if (!this.props.web3) {
             return <div>Loading Web3, accounts, and contract...</div>;
         }
         return (
@@ -57,8 +35,8 @@ class Default extends Component {
                 <p>
                     Try changing the value stored on <strong>line 40</strong> of App.js.
                 </p>
-                <div>The stored value is: {this.state.storageValue}</div>
-                <div>the smart contract: {this.state.contract._address}</div>
+                <div>The stored value is: {this.props.storageValue}</div>
+                <div>the smart contract: {this.props.contract._address}</div>
             </div>
         )
     }
