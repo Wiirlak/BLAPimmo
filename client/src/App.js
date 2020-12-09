@@ -7,8 +7,6 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Achat from "./Achat";
 import Default from "./Default";
 import Vente from "./Vente";
-import getWeb3 from "./getWeb3";
-import PropertyOwnershipContract from "./contracts/PropertyOwnership.json";
 
 class App extends Component {
     render() {
