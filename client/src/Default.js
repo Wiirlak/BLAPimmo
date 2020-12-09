@@ -3,7 +3,15 @@ import "./utils"
 import utils from "./utils";
 
 class Default extends Component {
-    state = {storageValue: 0, web3: null, accounts: null, contract: null};
+    constructor(props) {
+        super(props);
+        this.state = {
+            storageValue: 0,
+            web3: null,
+            accounts: null,
+            contract: null
+        };
+    }
 
     componentDidMount = async () => {
         await utils.loadComponentData()

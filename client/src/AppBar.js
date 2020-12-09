@@ -8,7 +8,6 @@ import {Button} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import {makeStyles} from "@material-ui/styles";
 
-
 const useStyles = makeStyles({
     toolbar: {
         display: "flex",

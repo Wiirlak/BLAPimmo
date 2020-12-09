@@ -2,7 +2,6 @@ import React, {Component} from "react";
 
 class Achat extends Component {
 
-
     render() {
         return (
             <div>
