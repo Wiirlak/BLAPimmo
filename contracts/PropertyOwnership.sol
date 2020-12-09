@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.16;
 
-import "./PropertyFactory.sol";
 import "./librairies/ERC721.sol";
 import "./librairies/SafeMath.sol";
+import "./Marketplace.sol";
 
-contract PropertyOwnership is PropertyFactory, ERC721 {
+contract PropertyOwnership is Marketplace, ERC721 {
 
     using SafeMath for uint256;
 
