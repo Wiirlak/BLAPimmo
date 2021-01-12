@@ -25,7 +25,7 @@ export default function AppHeader() {
                         <Menu/>
                     </IconButton>
                     <Typography variant="h6">
-                        Site
+                        BLAPimmo
                     </Typography>
                         <div className={classes.toolbar}>
                             <Button color="inherit">

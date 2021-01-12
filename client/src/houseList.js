@@ -3,6 +3,8 @@ import {Card, CardActionArea, CardContent, CardMedia, Grid} from "@material-ui/c
 import {House} from './modele/House'
 import {makeStyles} from "@material-ui/styles";
 import utils from "./utils";
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
+import ShopIcon from '@material-ui/icons/Shop';
 
 const useStyles = makeStyles({
     root: {
@@ -28,8 +30,7 @@ const random = (name) => (event) => {
     console.log(name)
 }
 
-
-export default function HouseList() {
+export function HouseListSold() {
     const classes = useStyles();
     utils.loadComponentData()
         .then(r => {
@@ -53,6 +54,42 @@ export default function HouseList() {
                                 <p>{house.price}</p>
                                 <p>{house.location}</p>
                             </CardContent>
+                            <LocalAtmIcon></LocalAtmIcon>
+                        </CardActionArea>
+                    </Card>
+                </Grid>
+
+            ))
+            }
+        </Grid>
+    )
+}
+
+export function HouseListBuy() {
+    const classes = useStyles();
+    utils.loadComponentData()
+        .then(r => {
+            console.log(r.web3.eth.getBlockNumber())
+            console.log(r.web3.eth.getBlock(22195367))
+            console.log(r.web3.eth.net.getId())
+        })
+    const houses = [new House('House 1', 80, ' 12 Rue du port'),
+        new House('House 2', 3, ' 12 Rue du pont')]
+    return (
+        <Grid container spacing={5}>
+            {houses.map( house => (
+                <Grid item>
+                    <Card className={classes.root}>
+                        <CardActionArea onClick={random(house.name)}>
+                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
+                                       title={house.name} className={classes.media}>
+                            </CardMedia>
+                            <CardContent>
+                                <p>{house.name}</p>
+                                <p>{house.price}</p>
+                                <p>{house.location}</p>
+                            </CardContent>
+                            <ShopIcon></ShopIcon>
                         </CardActionArea>
                     </Card>
                 </Grid>

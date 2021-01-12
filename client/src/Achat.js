@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import HouseList from "./houseList";
+import {HouseListBuy} from "./houseList";
 
 class Achat extends Component {
 
@@ -7,10 +7,10 @@ class Achat extends Component {
     render() {
         return (
             <div>
-                <p>Bonjour Achat</p>
-                <HouseList>
+                <p>Achetez un résidence !</p>
+                <HouseListBuy>
 
-                </HouseList>
+                </HouseListBuy>
             </div>
         )
     }
