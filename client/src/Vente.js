@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {HouseListSold} from "./houseList";
+import {HouseListOwn, HouseListSold} from "./houseList";
 import {Button, Dialog, DialogTitle, Grid, TextField} from "@material-ui/core";
 
 
@@ -16,6 +16,7 @@ class Vente extends Component {
                 <AlertDialog></AlertDialog>
                 <p>En votre possession</p>
                 <p>Listing des maisons achetées mais pas en vente</p>
+                <HouseListOwn></HouseListOwn>
 
             </div>
         )
@@ -40,7 +41,11 @@ export function AlertDialog() {
     };
     return (
         <div>
-        <Button onClick={handleClickOpen}>Mettre une nouvelle maison en vente</Button>
+            <br/>
+        <Button onClick={handleClickOpen} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
+            textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
+            Mettre une nouvelle maison en vente
+        </Button>
             <Dialog open={open} onClose={handleClose} maxWidth={'xs'} fullWidth>
                 <DialogTitle>Mettre en vente une maison</DialogTitle>
                 <Grid container direction={"column"} style={{display: 'flex', alignItems: 'center',justifyContent: 'center', marginBottom: '2vw', padding: '10px'}}>
