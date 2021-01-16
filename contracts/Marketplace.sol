@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.16;
+pragma solidity = 0.8.0;
 
 import "./PropertyFactory.sol";
 
-// TODO: price / check if user has sufficent wallet
+
 contract Marketplace is PropertyFactory {
+    using SafeMath for uint256;
 
     modifier onlyPropertyForSale(uint _propertyId) {
         require(IndexOf(_propertyId) >= 0);
@@ -22,6 +23,14 @@ contract Marketplace is PropertyFactory {
         emit newSale(propertyId);
     }
 
+    function isForSale(uint propertyId) public view returns (bool _isForSale) {
+        return IndexOf(propertyId) >= 0;
+    }
+
+    function getMarketPlace() public view returns (uint[] memory _marketPlace) {
+        return marketPlace;
+    }
+
     function removeProperty(uint propertyId) public onlyOwnerOf(propertyId) {
         int index = IndexOf(propertyId);
         if (index >= 0) {
@@ -31,8 +40,8 @@ contract Marketplace is PropertyFactory {
     }
 
     function transaction(uint256 _tokenId) public payable onlyPropertyForSale(_tokenId) {
-        address _from = propertyToOwner[_tokenId];
-        address(uint160(_from)).transfer(msg.value);
+        address payable _from = payable(propertyToOwner[_tokenId]);
+        _from.transfer(msg.value);
         ownerPropertyCount[_from] = ownerPropertyCount[_from].sub(1);
         ownerPropertyCount[msg.sender] = ownerPropertyCount[msg.sender].add(1);
         propertyToOwner[_tokenId] = msg.sender;

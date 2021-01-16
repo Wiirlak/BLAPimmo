@@ -6,13 +6,21 @@ module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
   contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+  compilers: {
+    solc: {
+      version: "0.8.0",
+      parser: "solcjs"
+    },
+  },
   networks: {
-    develop: {
-      port: 8545,
-      network_id: 20,
+    test: {
+      port: 9545,
+      network_id: '*',
       accounts: 5,
       defaultEtherBalance: 500,
-      blockTime: 3
+      blockTime: 3,
+      gasPrice: 12,
+      gas: 4700000
     },
     kovan: {
       provider: function() {
