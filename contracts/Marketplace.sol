@@ -8,7 +8,7 @@ contract Marketplace is PropertyFactory {
     using SafeMath for uint256;
 
     modifier onlyPropertyForSale(uint _propertyId) {
-        require(IndexOf(_propertyId) >= 0);
+        require(IndexOfMarketPlace(_propertyId) >= 0);
         require(msg.value == properties[_propertyId].price);
         _;
     }
@@ -24,15 +24,15 @@ contract Marketplace is PropertyFactory {
     }
 
     function isForSale(uint propertyId) public view returns (bool _isForSale) {
-        return IndexOf(propertyId) >= 0;
+        return IndexOfMarketPlace(propertyId) >= 0;
     }
 
     function getMarketPlace() public view returns (uint[] memory _marketPlace) {
         return marketPlace;
     }
 
-    function removeProperty(uint propertyId) public onlyOwnerOf(propertyId) {
-        int index = IndexOf(propertyId);
+    function removePropertyFromMarketPlace(uint propertyId) public onlyOwnerOf(propertyId) {
+        int index = IndexOfMarketPlace(propertyId);
         if (index >= 0) {
             emit deletedSale(uint(propertyId));
             delete marketPlace[uint256(index)];
@@ -45,10 +45,28 @@ contract Marketplace is PropertyFactory {
         ownerPropertyCount[_from] = ownerPropertyCount[_from].sub(1);
         ownerPropertyCount[msg.sender] = ownerPropertyCount[msg.sender].add(1);
         propertyToOwner[_tokenId] = msg.sender;
-        removeProperty(_tokenId);
+        removePropertyFromOwner(_tokenId, _from);
+        ownerToProperties[msg.sender].push(_tokenId);
+        removePropertyFromMarketPlace(_tokenId);
     }
 
-    function IndexOf(uint value) private view returns(int) {
+    function removePropertyFromOwner(uint propertyId, address owner) private onlyOwnerOf(propertyId) {
+        int index = IndexOfOwnerProperties(propertyId, owner);
+        if (index >= 0) {
+            delete ownerToProperties[owner][uint256(index)];
+        }
+    }
+
+    function IndexOfOwnerProperties(uint value, address owner) private view returns(int) {
+        for(uint index = 0; index < ownerToProperties[owner].length; index++) {
+            if (ownerToProperties[owner][index] == value) {
+                return int(index);
+            }
+        }
+        return -1;
+    }
+
+    function IndexOfMarketPlace(uint value) private view returns(int) {
         for(uint index = 0; index < marketPlace.length; index++) {
             if (marketPlace[index] == value) {
                 return int(index);
