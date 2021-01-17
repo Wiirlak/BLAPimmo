@@ -12,9 +12,8 @@ import {
 } from "@material-ui/core";
 import {House} from './modele/House'
 import {makeStyles} from "@material-ui/styles";
-import utils from "./utils";
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import ShopIcon from '@material-ui/icons/Shop';
+const ethers = require("ethers");
 
 const useStyles = makeStyles({
     root: {
@@ -36,47 +35,12 @@ const useStyles = makeStyles({
     },
 });
 
-const sellHouse = (name) => (event) => {
-    console.log(name)
-}
-
 const buyHouse = (name) => (event) => {
     console.log(name)
 }
 
-export function HouseListSold() {
-    const classes = useStyles();
-    // utils.loadComponentData()
-    //     .then(r => {
-    //         console.log(r.web3.eth.getBlockNumber())
-    //         console.log(r.web3.eth.getBlock(22195367))
-    //         console.log(r.web3.eth.net.getId())
-    //     })
-    const houses = [new House('House 1', 80, ' 12 Rue du port'),
-        new House('House 2', 3, ' 12 Rue du pont')]
-    return (
-        <Grid container spacing={5}>
-            {houses.map( house => (
-                <Grid item>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
-                            title={house.name} className={classes.media}>
-                            </CardMedia>
-                            <CardContent>
-                                <p>{house.name}</p>
-                                <p>{house.price}</p>
-                                <p>{house.location}</p>
-                            </CardContent>
-                            <AlertDialogSell house={house}/>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
-
-            ))
-            }
-        </Grid>
-    )
+const sellHouse = (name) => (event) => {
+    console.log(name)
 }
 
 export function HouseListBuy() {
@@ -96,8 +60,7 @@ export function HouseListBuy() {
     //         console.log(r.web3.eth.getBlock(22195367))
     //         console.log(r.web3.eth.net.getId())
     //     })
-    const houses = [new House('House 1', 80, ' 12 Rue du port'),
-        new House('House 2', 3, ' 12 Rue du pont')]
+    const houses = []
     return (
         <Grid container spacing={5}>
             {houses.map( house => (
@@ -126,40 +89,7 @@ export function HouseListBuy() {
     )
 }
 
-export function HouseListOwn() {
-    const classes = useStyles();
-    // utils.loadComponentData()
-    //     .then(r => {
-    //         console.log(r.web3.eth.getBlockNumber())
-    //         console.log(r.web3.eth.getBlock(22195367))
-    //         console.log(r.web3.eth.net.getId())
-    //     })
-    const houses = [new House('House 1', 80, ' 12 Rue du port'),
-        new House('House 2', 3, ' 12 Rue du pont')]
-    return (
-        <Grid container spacing={5}>
-            {houses.map( house => (
-                <Grid item>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
-                                       title={house.name} className={classes.media}>
-                            </CardMedia>
-                            <CardContent>
-                                <p>{house.name}</p>
-                                <p>{house.price}</p>
-                                <p>{house.location}</p>
-                            </CardContent>
-                            <AlertDialogSell house={house}/>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
 
-            ))
-            }
-        </Grid>
-    )
-}
 
 
 export function AlertDialogSell(house) {
