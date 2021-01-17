@@ -14,6 +14,7 @@ import {
 import utils from "./utils";
 import {House} from "./modele/House";
 import {makeStyles} from "@material-ui/styles";
+import {ethers} from "ethers";
 
 const styleHouseListSold = makeStyles({
     root: {
@@ -43,7 +44,13 @@ class Vente extends Component {
         this.state = {
             propertiesArrayOwned: [],
             propertiesArrayToSale: [],
-            isLoading: true
+            isLoading: true,
+            labelName: "",
+            labelAddress: "",
+            labelDescription: "",
+            labelPrix: 0,
+            labelSurface: 0,
+            setOpen: false
         };
     }
 
@@ -63,13 +70,13 @@ class Vente extends Component {
                         :<p>Empty result</p>
                     :<p>Loading</p>
                 }
-                <AlertDialog></AlertDialog>
+                <this.AlertDialog></this.AlertDialog>
                 <p>En votre possession</p>
                 <p>Listing des maisons achetées mais pas en vente</p>
                 {!this.isLoading ?
                     this.state.propertiesArrayOwned.length ?
                         <this.HouseListOwn data={this.state}/>
-                        :<p>{this.state.propertiesArrayOwned}</p>
+                        :<p>Empty result</p>
                     :<p>Loading</p>
                 }
 
@@ -82,6 +89,8 @@ class Vente extends Component {
 
         // const market = await componentData.contract.methods.getMarketPlace().call();
         const properties = await componentData.contract.methods.getPropertiesByOwner().call({ from: componentData.accounts[0]})
+
+        this.setState({propertiesArrayToSale: [], propertiesArrayOwned: []})
 
         for(const property in properties) {
             const propertyTmp = await componentData.contract.methods.getProperty(property).call()
@@ -152,36 +161,75 @@ class Vente extends Component {
             </Grid>
         )
     }
-}
 
+    handleClose = () =>{
+        this.setState({ open: false})
+    }
+
+    handleClickOpen = () =>{
+        this.setState({ open: true})
+    }
+
+
+    AlertDialog = ()  => {
+
+        return (
+            <div>
+                <br/>
+                <Button onClick={this.handleClickOpen} style={{
+                    backgroundColor: '#3f51b5',
+                    border: 'none',
+                    color: 'white',
+                    padding: '20px',
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                    fontSize: '16px',
+                    margin: '4px 2px',
+                    cursor: 'pointer'
+                }}>
+                    Mettre une nouvelle maison en vente
+                </Button>
+                <Dialog open={this.state.open} onClose={this.handleClose} maxWidth={'xs'} fullWidth>
+                    <DialogTitle>Mettre en vente une maison</DialogTitle>
+                    <Grid container direction={"column"} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '2vw',
+                        padding: '10px'
+                    }}>
+                        <TextField label="Label" name="labelName" value={this.state.labelName} onChange={this.handleChange.bind(this)}/>
+                        <TextField label="Adresse" name="labelAddress" value={this.state.labelAddress} onChange={this.handleChange.bind(this)}/>
+                        <TextField label="Description" name="labelDescription" value={this.state.labelDescription} onChange={this.handleChange.bind(this)}/>
+                        <TextField label="Prix" name="labelPrix" value={this.state.labelPrix} onChange={this.handleChange.bind(this)}/>
+                        <TextField type="number" label="Surface" name="labelSurface" value={this.state.labelSurface} onChange={this.handleChange.bind(this)}/>
+                        <Button style={{marginTop: '1vw'}} onClick={this.saveNewProperty}>Payer</Button>
+                    </Grid>
+                </Dialog>
+            </div>
+        )
+    }
+
+    saveNewProperty = async () => {
+        const componentData = await utils.loadComponentData()
+
+        await componentData.contract.methods.createProperty(
+            parseInt(this.state.labelPrix),
+            parseInt(this.state.labelSurface),
+            ethers.utils.formatBytes32String(this.state.labelName),
+            ethers.utils.formatBytes32String(this.state.labelAddress),
+            this.state.labelDescription,
+            ethers.utils.formatBytes32String("2021-01-16T13:23:11Z"),
+        ).send({ from: componentData.accounts[0], gas: 300000 }).then(_ => {
+            this.handleClose()
+            this.getOwnedProperties()
+        })
+
+    }
+
+    handleChange(e) {
+        this.setState({ [e.target.name] : e.target.value });
+    }
+}
 export default Vente;
-
-export function AlertDialog() {
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-    return (
-        <div>
-            <br/>
-        <Button onClick={handleClickOpen} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
-            textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
-            Mettre une nouvelle maison en vente
-        </Button>
-            <Dialog open={open} onClose={handleClose} maxWidth={'xs'} fullWidth>
-                <DialogTitle>Mettre en vente une maison</DialogTitle>
-                <Grid container direction={"column"} style={{display: 'flex', alignItems: 'center',justifyContent: 'center', marginBottom: '2vw', padding: '10px'}}>
-                    <TextField label="Label" />
-                    <TextField label="Adresse" />
-                    <TextField label="Description" />
-                    <TextField label="Prix" />
-                    <Button style={{marginTop: '1vw'}}>Payer</Button>
-                </Grid>
-            </Dialog>
-        </div>
-    )
-}
