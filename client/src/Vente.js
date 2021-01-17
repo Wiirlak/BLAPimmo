@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {AlertDialogSell} from "./houseList";
 import {
     Button,
     Card,
@@ -15,6 +14,7 @@ import utils from "./utils";
 import {House} from "./modele/House";
 import {makeStyles} from "@material-ui/styles";
 import {ethers} from "ethers";
+import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 
 const styleHouseListSold = makeStyles({
     root: {
@@ -49,13 +49,12 @@ class Vente extends Component {
             labelAddress: "",
             labelDescription: "",
             labelPrix: 0,
-            labelSurface: 0,
-            setOpen: false
+            labelSurface: 0
         };
     }
 
     componentDidMount() {
-       this.getOwnedProperties().then(load => this.setState({isLoading: false})
+       this.getOwnedProperties().then(_ => this.setState({isLoading: false})
        );
     }
 
@@ -70,7 +69,8 @@ class Vente extends Component {
                         :<p>Empty result</p>
                     :<p>Loading</p>
                 }
-                <this.AlertDialog></this.AlertDialog>
+                <this.AlertDialog/>
+                <this.AlertDialogSell/>
                 <p>En votre possession</p>
                 <p>Listing des maisons achetées mais pas en vente</p>
                 {!this.isLoading ?
@@ -100,7 +100,9 @@ class Vente extends Component {
                                     propertyTmp.name,
                                     propertyTmp.addr,
                                     propertyTmp.description,
-                                    propertyTmp.dateUtc )
+                                    propertyTmp.dateUtc,
+                                    parseInt(property)
+                )
             if(isForSale){
                 this.setState({propertiesArrayToSale: [...this.state.propertiesArrayToSale, house]})
             }else{
@@ -126,7 +128,6 @@ class Vente extends Component {
                                     <p>{house.price}</p>
                                     <p>{house.description}</p>
                                 </CardContent>
-                                <AlertDialogSell house={house}/>
                             </CardActionArea>
                         </Card>
                     </Grid>
@@ -136,7 +137,7 @@ class Vente extends Component {
         )
     }
 
-    HouseListOwn(props) {
+    HouseListOwn = (props) => {
         const classes = styleHouseListSold();
         return (
             <Grid container spacing={5}>
@@ -152,7 +153,10 @@ class Vente extends Component {
                                     <p>{house.price}</p>
                                     <p>{house.description}</p>
                                 </CardContent>
-                                <AlertDialogSell house={house}/>
+                                <Button onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
+                                    textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
+                                    <LocalAtmIcon></LocalAtmIcon>
+                                </Button>
                             </CardActionArea>
                         </Card>
                     </Grid>
@@ -162,12 +166,20 @@ class Vente extends Component {
         )
     }
 
-    handleClose = () =>{
-        this.setState({ open: false})
+    handleCloseCreate = () =>{
+        this.setState({ openCreate: false})
     }
 
-    handleClickOpen = () =>{
-        this.setState({ open: true})
+    handleClickOpenCreate = () =>{
+        this.setState({ openCreate: true})
+    }
+
+    handleCloseSell = () =>{
+        this.setState({ openSell: false,selectedHouse: null})
+    }
+
+    handleClickOpenSell = (house) =>{
+        this.setState({ openSell: true, selectedHouse: house})
     }
 
 
@@ -176,7 +188,7 @@ class Vente extends Component {
         return (
             <div>
                 <br/>
-                <Button onClick={this.handleClickOpen} style={{
+                <Button onClick={this.handleClickOpenCreate} style={{
                     backgroundColor: '#3f51b5',
                     border: 'none',
                     color: 'white',
@@ -190,7 +202,7 @@ class Vente extends Component {
                 }}>
                     Mettre une nouvelle maison en vente
                 </Button>
-                <Dialog open={this.state.open} onClose={this.handleClose} maxWidth={'xs'} fullWidth>
+                <Dialog open={this.state.openCreate} onClose={this.handleCloseCreate} maxWidth={'xs'} fullWidth>
                     <DialogTitle>Mettre en vente une maison</DialogTitle>
                     <Grid container direction={"column"} style={{
                         display: 'flex',
@@ -230,6 +242,31 @@ class Vente extends Component {
 
     handleChange(e) {
         this.setState({ [e.target.name] : e.target.value });
+    }
+
+    AlertDialogSell = ()  =>  {
+
+        return (
+            <div>
+                <br/>
+                <Dialog open={this.state.openSell} onClose={this.handleCloseSell} maxWidth={'xs'} fullWidth>
+                    <DialogTitle>Mettre en vente une maison</DialogTitle>
+                    <Grid container direction={"column"} style={{display: 'flex', alignItems: 'center',justifyContent: 'center', marginBottom: '2vw', padding: '10px'}}>
+                        <p>Etes vous sur ?</p>
+                        <Button style={{marginTop: '1vw'}}  onClick={()  => this.sellHouse()}>Confirmer</Button>
+                    </Grid>
+                </Dialog>
+            </div>
+        )
+    }
+
+    sellHouse = async () => {
+        const componentData = await utils.loadComponentData();
+        componentData.contract.methods.addProperty(this.state.selectedHouse.id).send({ from: componentData.accounts[0]}).then(_ => {
+            this.handleCloseSell()
+            this.getOwnedProperties()
+        })
+        console.log(this.state.selectedHouse)
     }
 }
 export default Vente;

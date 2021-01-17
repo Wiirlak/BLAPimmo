@@ -39,10 +39,6 @@ const buyHouse = (name) => (event) => {
     console.log(name)
 }
 
-const sellHouse = (name) => (event) => {
-    console.log(name)
-}
-
 export function HouseListBuy() {
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
@@ -86,36 +82,5 @@ export function HouseListBuy() {
             ))
             }
         </Grid>
-    )
-}
-
-
-
-
-export function AlertDialogSell(house) {
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-        console.log('vendu')
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-    return (
-        <div>
-            <br/>
-            <Button onClick={handleClickOpen} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
-                textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
-                <LocalAtmIcon></LocalAtmIcon>
-            </Button>
-            <Dialog open={open} onClose={handleClose} maxWidth={'xs'} fullWidth>
-                <DialogTitle>Mettre en vente une maison</DialogTitle>
-                <Grid container direction={"column"} style={{display: 'flex', alignItems: 'center',justifyContent: 'center', marginBottom: '2vw', padding: '10px'}}>
-                    <TextField label="Prix" />
-                    <Button style={{marginTop: '1vw'}}  onClick={sellHouse(house)}>Mettre en vente</Button>
-                </Grid>
-            </Dialog>
-        </div>
     )
 }
