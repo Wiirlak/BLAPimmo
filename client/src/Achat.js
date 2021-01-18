@@ -148,6 +148,7 @@ class Achat extends Component {
         componentData.contract.methods.transaction(this.state.selectedHouse.id).send({ from: componentData.accounts[0], value:amountToSend}).then(_ => {
             this.handleCloseSell()
             this.getOwnedProperties()
+
         })
     }
 }
