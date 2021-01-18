@@ -33,10 +33,12 @@ contract Marketplace is PropertyFactory {
 
     function removePropertyFromMarketPlace(uint propertyId) public onlyOwnerOf(propertyId) {
         int index = IndexOfMarketPlace(propertyId);
-        if (index >= 0) {
-            emit deletedSale(uint(propertyId));
-            delete marketPlace[uint256(index)];
+        if (uint(index) >= marketPlace.length) return;
+
+        for (uint i = uint(index); i<marketPlace.length-1; i++){
+            marketPlace[i] = marketPlace[i+1];
         }
+        marketPlace.pop();
     }
 
     function transaction(uint256 _tokenId) public payable onlyPropertyForSale(_tokenId) {
@@ -52,9 +54,12 @@ contract Marketplace is PropertyFactory {
 
     function removePropertyFromOwner(uint propertyId, address owner) private onlyOwnerOf(propertyId) {
         int index = IndexOfOwnerProperties(propertyId, owner);
-        if (index >= 0) {
-            delete ownerToProperties[owner][uint256(index)];
+        if (uint(index) >= ownerToProperties[owner].length) return;
+
+        for (uint i = uint(index); i<ownerToProperties[owner].length-1; i++){
+            ownerToProperties[owner][i] = ownerToProperties[owner][i+1];
         }
+        ownerToProperties[owner].pop();
     }
 
     function IndexOfOwnerProperties(uint value, address owner) private view returns(int) {
