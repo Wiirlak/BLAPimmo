@@ -144,11 +144,11 @@ class Achat extends Component {
 
     buyHouse = async () => {
         const componentData = await utils.loadComponentData();
-        componentData.contract.methods.transaction(this.state.selectedHouse.id).send({ from: componentData.accounts[0]}).then(_ => {
+        const amountToSend = componentData.web3.utils.toWei(this.state.selectedHouse.price, "ether");
+        componentData.contract.methods.transaction(this.state.selectedHouse.id).send({ from: componentData.accounts[0], value:amountToSend}).then(_ => {
             this.handleCloseSell()
             this.getOwnedProperties()
         })
-        console.log(this.state.selectedHouse)
     }
 }
 
