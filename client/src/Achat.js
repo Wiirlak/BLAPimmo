@@ -82,10 +82,9 @@ class Achat extends Component {
                 propertyTmp.dateUtc,
                 parseInt(properties[property])
             )
-
             this.setState({propertiesArrayToSale: [...this.state.propertiesArrayToSale, house]})
         }
-        console.log(this.state.propertiesArrayToSale)
+
     }
 
     HouseListBuy = (props) =>  {
@@ -144,6 +143,7 @@ class Achat extends Component {
 
     buyHouse = async () => {
         const componentData = await utils.loadComponentData();
+
         const amountToSend = componentData.web3.utils.toWei(this.state.selectedHouse.price, "ether");
         componentData.contract.methods.transaction(this.state.selectedHouse.id).send({ from: componentData.accounts[0], value:amountToSend}).then(_ => {
             this.handleCloseSell()
