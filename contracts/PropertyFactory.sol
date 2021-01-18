@@ -36,8 +36,8 @@ contract PropertyFactory is Ownable {
         string memory description,
         bytes32 dateUtc
     ) public {
-        properties.push(Property(price, surface, addr, name, description, dateUtc));
         uint id = properties.length;
+        properties.push(Property(price, surface, addr, name, description, dateUtc));
         propertyToOwner[id] = msg.sender;
         ownerToProperties[msg.sender].push(id);
         ownerPropertyCount[msg.sender] = ownerPropertyCount[msg.sender].add(1);
