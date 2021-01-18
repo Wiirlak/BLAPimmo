@@ -1,7 +1,16 @@
 import React, {Component} from "react";
 import utils from "./utils";
 import {House} from "./modele/House";
-import {Button, Card, CardActionArea, CardContent, CardMedia, Dialog, DialogTitle, Grid} from "@material-ui/core";
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Dialog,
+    DialogTitle,
+    Grid
+} from "@material-ui/core";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 import {makeStyles} from "@material-ui/styles";
 
@@ -33,7 +42,8 @@ class Achat extends Component {
         this.state = {
             propertiesArrayToSale: [],
             selectedHouse: null,
-            isLoading: true
+            isLoading: true,
+            openSell: false
         };
     }
     render() {
@@ -83,22 +93,22 @@ class Achat extends Component {
         return (
             <Grid container spacing={5}>
                 {props.data.propertiesArrayToSale.map( house => (
-                    <Grid item>
+                    <Grid item key={house.id}>
                         <Card className={classes.root}>
-                            <CardActionArea>
-                                <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
-                                           title={house.name} className={classes.media}>
-                                </CardMedia>
-                                <CardContent>
-                                    <p>{house.name}</p>
-                                    <p>{house.price}</p>
-                                    <p>{house.description}</p>
-                                </CardContent>
+                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
+                                       title={house.name} className={classes.media}>
+                            </CardMedia>
+                            <CardContent width={"100%"}>
+                                <p>{house.name}</p>
+                                <p>{house.price}</p>
+                                <p>{house.description}</p>
+                            </CardContent>
+                            <CardActions>
                                 <Button onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
                                     textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
                                     <LocalAtmIcon></LocalAtmIcon>
                                 </Button>
-                            </CardActionArea>
+                            </CardActions>
                         </Card>
                     </Grid>
 

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {
     Button,
     Card,
-    CardActionArea,
+    CardActions,
     CardContent,
     CardMedia,
     Dialog,
@@ -51,7 +51,10 @@ class Vente extends Component {
             labelDescription: "",
             labelPrix: 0,
             labelSurface: 0,
-            selectedHouse: null
+            selectedHouse: null,
+            openCreate: false,
+            openSell: false,
+            openDelete: false
         };
     }
 
@@ -116,25 +119,26 @@ class Vente extends Component {
     HouseListSold = (props) => {
         const classes = styleHouseListSold();
 
+        console.log(props.data.propertiesArrayToSale)
         return (
             <Grid container spacing={5}>
                 {props.data.propertiesArrayToSale.map( house => (
-                    <Grid item>
+                    <Grid item key={house.id}>
                         <Card className={classes.root}>
-                            <CardActionArea>
-                                <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
-                                           title={house.name} className={classes.media}>
-                                </CardMedia>
-                                <CardContent>
-                                    <p>{house.name}</p>
-                                    <p>{house.price}</p>
-                                    <p>{house.description}</p>
-                                </CardContent>
+                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
+                                       title={house.name} className={classes.media}>
+                            </CardMedia>
+                            <CardContent>
+                                <p>{house.name}</p>
+                                <p>{house.price}</p>
+                                <p>{house.description}</p>
+                            </CardContent>
+                            <CardActions>
                                 <Button onClick={() => this.handleClickOpenDelete(house)} style={{backgroundColor: '#ff0000', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
                                     textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
                                     <DeleteIcon></DeleteIcon>
                                 </Button>
-                            </CardActionArea>
+                            </CardActions>
                         </Card>
                     </Grid>
                 ))
@@ -148,22 +152,23 @@ class Vente extends Component {
         return (
             <Grid container spacing={5}>
                 {props.data.propertiesArrayOwned.map( house => (
-                    <Grid item>
+                    <Grid item key={house.id}>
                         <Card className={classes.root}>
-                            <CardActionArea>
-                                <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
-                                           title={house.name} className={classes.media}>
-                                </CardMedia>
-                                <CardContent>
-                                    <p>{house.name}</p>
-                                    <p>{house.price}</p>
-                                    <p>{house.description}</p>
-                                </CardContent>
+
+                            <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
+                                       title={house.name} className={classes.media}>
+                            </CardMedia>
+                            <CardContent>
+                                <p>{house.name}</p>
+                                <p>{house.price}</p>
+                                <p>{house.description}</p>
+                            </CardContent>
+                            <CardActions>
                                 <Button onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
                                     textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
                                     <LocalAtmIcon></LocalAtmIcon>
                                 </Button>
-                            </CardActionArea>
+                            </CardActions>
                         </Card>
                     </Grid>
                 ))
@@ -248,7 +253,7 @@ class Vente extends Component {
             this.state.labelDescription,
             ethers.utils.formatBytes32String("2021-01-16T13:23:11Z"),
         ).send({ from: componentData.accounts[0], gas: 300000 }).then(_ => {
-            this.handleClose()
+            this.handleCloseCreate()
             this.getOwnedProperties()
         })
 
