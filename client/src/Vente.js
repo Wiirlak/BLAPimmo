@@ -15,6 +15,7 @@ import {House} from "./modele/House";
 import {makeStyles} from "@material-ui/styles";
 import {ethers} from "ethers";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const styleHouseListSold = makeStyles({
     root: {
@@ -49,7 +50,8 @@ class Vente extends Component {
             labelAddress: "",
             labelDescription: "",
             labelPrix: 0,
-            labelSurface: 0
+            labelSurface: 0,
+            selectedHouse: null
         };
     }
 
@@ -71,6 +73,7 @@ class Vente extends Component {
                 }
                 <this.AlertDialog/>
                 <this.AlertDialogSell/>
+                <this.AlertDialogDelete/>
                 <p>En votre possession</p>
                 <p>Listing des maisons achetées mais pas en vente</p>
                 {!this.isLoading ?
@@ -87,21 +90,20 @@ class Vente extends Component {
     async getOwnedProperties(){
         const componentData = await utils.loadComponentData();
 
-        // const market = await componentData.contract.methods.getMarketPlace().call();
         const properties = await componentData.contract.methods.getPropertiesByOwner().call({ from: componentData.accounts[0]})
 
         this.setState({propertiesArrayToSale: [], propertiesArrayOwned: []})
 
         for(const property in properties) {
-            const propertyTmp = await componentData.contract.methods.getProperty(property).call()
-            const isForSale = await componentData.contract.methods.isForSale(property).call()
+            const propertyTmp = await componentData.contract.methods.getProperty(properties[property]).call()
+            const isForSale = await componentData.contract.methods.isForSale(properties[property]).call()
             const house = new House(propertyTmp.price,
                                     propertyTmp.surface,
                                     propertyTmp.name,
                                     propertyTmp.addr,
                                     propertyTmp.description,
                                     propertyTmp.dateUtc,
-                                    parseInt(property)
+                                    parseInt(properties[property])
                 )
             if(isForSale){
                 this.setState({propertiesArrayToSale: [...this.state.propertiesArrayToSale, house]})
@@ -111,7 +113,7 @@ class Vente extends Component {
         }
     }
 
-    HouseListSold(props) {
+    HouseListSold = (props) => {
         const classes = styleHouseListSold();
 
         return (
@@ -128,6 +130,10 @@ class Vente extends Component {
                                     <p>{house.price}</p>
                                     <p>{house.description}</p>
                                 </CardContent>
+                                <Button onClick={() => this.handleClickOpenDelete(house)} style={{backgroundColor: '#ff0000', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
+                                    textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
+                                    <DeleteIcon></DeleteIcon>
+                                </Button>
                             </CardActionArea>
                         </Card>
                     </Grid>
@@ -180,6 +186,14 @@ class Vente extends Component {
 
     handleClickOpenSell = (house) =>{
         this.setState({ openSell: true, selectedHouse: house})
+    }
+
+    handleCloseDelete = () =>{
+        this.setState({ openDelete: false,selectedHouse: null})
+    }
+
+    handleClickOpenDelete = (house) =>{
+        this.setState({ openDelete: true, selectedHouse: house})
     }
 
 
@@ -267,6 +281,31 @@ class Vente extends Component {
             this.getOwnedProperties()
         })
         console.log(this.state.selectedHouse)
+    }
+
+    AlertDialogDelete = ()  =>  {
+
+        return (
+            <div>
+                <br/>
+                <Dialog open={this.state.openDelete} onClose={this.handleCloseDelete} maxWidth={'xs'} fullWidth>
+                    <DialogTitle>Enlever votre maison de la vente</DialogTitle>
+                    <Grid container direction={"column"} style={{display: 'flex', alignItems: 'center',justifyContent: 'center', marginBottom: '2vw', padding: '10px'}}>
+                        <p>Etes vous sur ?</p>
+                        <Button style={{marginTop: '1vw'}}  onClick={()  => this.removeHouseFromMarket()}>Confirmer</Button>
+                    </Grid>
+                </Dialog>
+            </div>
+        )
+    }
+
+    removeHouseFromMarket = async () => {
+        const componentData = await utils.loadComponentData();
+        console.log(componentData.contract.methods)
+        componentData.contract.methods.removePropertyFromMarketPlace(this.state.selectedHouse.id).send({ from: componentData.accounts[0]}).then(_ => {
+            this.handleCloseDelete()
+            this.getOwnedProperties()
+        })
     }
 }
 export default Vente;
