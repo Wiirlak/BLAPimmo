@@ -42,7 +42,7 @@ contract Marketplace is PropertyFactory {
     function transaction(uint256 _tokenId) public payable onlyPropertyForSale(_tokenId) {
         address payable _from = payable(propertyToOwner[_tokenId]);
         _from.transfer(msg.value);
-        ownerPropertyCount[_from] = ownerPropertyCount[_from].sub(1);
+        ownerPropertyCount[propertyToOwner[_tokenId]] = ownerPropertyCount[propertyToOwner[_tokenId]].sub(1);
         ownerPropertyCount[msg.sender] = ownerPropertyCount[msg.sender].add(1);
         propertyToOwner[_tokenId] = msg.sender;
         removePropertyFromOwner(_tokenId, _from);
