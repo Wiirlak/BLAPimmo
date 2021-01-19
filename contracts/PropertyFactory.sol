@@ -40,7 +40,6 @@ contract PropertyFactory is Ownable {
         properties.push(Property(price, surface, addr, name, description, dateUtc));
         propertyToOwner[id] = msg.sender;
         ownerToProperties[msg.sender].push(id);
-        ownerPropertyCount[msg.sender] = ownerPropertyCount[msg.sender].add(1);
     }
 
     function getProperty(uint propertyId) public view returns (Property memory _property) {
