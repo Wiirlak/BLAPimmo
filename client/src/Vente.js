@@ -15,7 +15,7 @@ import {House} from "./modele/House";
 import {makeStyles} from "@material-ui/styles";
 import {ethers} from "ethers";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
-import DeleteIcon from '@material-ui/icons/Delete';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const styleHouseListSold = makeStyles({
     root: {
@@ -66,8 +66,8 @@ class Vente extends Component {
     render() {
         return (
             <div>
-                <p>Vendre une de vos résidences !</p>
-                <p>Actuellement en vente</p>
+                <h1>Vendre une de vos résidences !</h1>
+                <h2>Actuellement en vente</h2>
                 {!this.isLoading ?
                     this.state.propertiesArrayToSale.length ?
                         <this.HouseListSold data={this.state}/>
@@ -77,8 +77,8 @@ class Vente extends Component {
                 <this.AlertDialog/>
                 <this.AlertDialogSell/>
                 <this.AlertDialogDelete/>
-                <p>En votre possession</p>
-                <p>Listing des maisons achetées mais pas en vente</p>
+                <h1>En votre possession</h1>
+                <h2>Liste de vos maisons pas en vente</h2>
                 {!this.isLoading ?
                     this.state.propertiesArrayOwned.length ?
                         <this.HouseListOwn data={this.state}/>
@@ -121,22 +121,27 @@ class Vente extends Component {
 
         console.log(props.data.propertiesArrayToSale)
         return (
-            <Grid container spacing={5}>
+            <Grid container spacing={5}  style={{marginLeft:'1vH', marginRight:'1vH'}}>
                 {props.data.propertiesArrayToSale.map( house => (
-                    <Grid item key={house.id}>
-                        <Card className={classes.root}>
+                    <Grid item key={house.id} style={{display: 'flex', alignItems: 'stretch', justifyContent: 'space-between'}}>
+                        <Card className={classes.root} style={{display: 'flex', flexDirection:'column', maxWidth:'17vW', minWidth:'17vW'}}>
                             <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
                                        title={house.name} className={classes.media}>
                             </CardMedia>
-                            <CardContent>
-                                <p>{house.name}</p>
-                                <p>{house.price}</p>
-                                <p>{house.description}</p>
+                            <CardContent  width={"100%"} style={{display:'inline-block'}}>
+                                <div style={{display:'flex',justifyContent: 'space-between' }}>
+                                    <p><b>{house.name}</b></p>
+                                    <p style={{marginLeft:'9vW'}}><b>Prix</b>: {house.price}Ξ</p>
+                                </div>
+                                <p><b>Mise en vente le</b>: {house.dateUtc}</p>
+                                <p><b>Surface</b>: {house.surface}m²</p>
+                                <p style={{maxWidth: '20vW', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '15vH'}}>{house.description}</p>
                             </CardContent>
-                            <CardActions>
-                                <Button onClick={() => this.handleClickOpenDelete(house)} style={{backgroundColor: '#ff0000', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
-                                    textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
-                                    <DeleteIcon></DeleteIcon>
+                            <CardActions width={"100%"} style={{marginTop: 'auto'}}>
+                                <Button onClick={() => this.handleClickOpenDelete(house)} style={{backgroundColor: '#ff7777', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
+                                    textDecoration: 'none', display: 'flex', fontSize: '10px', margin: '4px 2px', cursor: 'pointer', width:'100%'}}>
+                                    <p style={{marginRight:'10px'}}>Annuler la mise en vente !</p>
+                                    <CancelIcon/>
                                 </Button>
                             </CardActions>
                         </Card>
@@ -150,23 +155,28 @@ class Vente extends Component {
     HouseListOwn = (props) => {
         const classes = styleHouseListSold();
         return (
-            <Grid container spacing={5}>
+            <Grid container spacing={5}  style={{marginLeft:'1vH', marginRight:'1vH'}}>
                 {props.data.propertiesArrayOwned.map( house => (
-                    <Grid item key={house.id}>
-                        <Card className={classes.root}>
+                    <Grid item key={house.id} style={{display: 'flex', alignItems: 'stretch', justifyContent: 'space-between'}}>
+                        <Card className={classes.root} style={{display: 'flex', flexDirection:'column', maxWidth:'17vW', minWidth:'17vW'}}>
 
                             <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
                                        title={house.name} className={classes.media}>
                             </CardMedia>
-                            <CardContent>
-                                <p>{house.name}</p>
-                                <p>{house.price}</p>
-                                <p>{house.description}</p>
+                            <CardContent width={"100%"} style={{display:'inline-block'}}>
+                                <div style={{display:'flex',justifyContent: 'space-between' }}>
+                                    <p><b>{house.name}</b></p>
+                                    <p style={{marginLeft:'9vW'}}><b>Prix</b>: {house.price}Ξ</p>
+                                </div>
+                                <p stylme={{textAlign: 'left'}}><b>Mise en vente le</b>: {house.dateUtc}</p>
+                                <p><b>Surface</b>: {house.surface}m²</p>
+                                <p style={{maxWidth: '20vW', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '15vH'}}>{house.description}</p>
                             </CardContent>
-                            <CardActions>
+                            <CardActions  width={"100%"} style={{marginTop: 'auto'}}>
                                 <Button onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
-                                    textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
-                                    <LocalAtmIcon></LocalAtmIcon>
+                                    textDecoration: 'none', display: 'flex', fontSize: '10px', margin: '4px 2px', cursor: 'pointer', width:'100%'}}>
+                                    <p  style={{marginRight:'5px'}}>Mettre en vente !</p>
+                                    <LocalAtmIcon/>
                                 </Button>
                             </CardActions>
                         </Card>
@@ -230,10 +240,10 @@ class Vente extends Component {
                         marginBottom: '2vw',
                         padding: '10px'
                     }}>
-                        <TextField label="Label" name="labelName" value={this.state.labelName} onChange={this.handleChange.bind(this)}/>
-                        <TextField label="Adresse" name="labelAddress" value={this.state.labelAddress} onChange={this.handleChange.bind(this)}/>
+                        <TextField label="Label" name="labelName" value={this.state.labelName} onChange={this.handleChange.bind(this)} inputProps={{ maxLength: 30 }}/>
+                        <TextField label="Adresse" name="labelAddress" value={this.state.labelAddress} onChange={this.handleChange.bind(this)} inputProps={{ maxLength: 30 }}/>
                         <TextField label="Description" name="labelDescription" value={this.state.labelDescription} onChange={this.handleChange.bind(this)}/>
-                        <TextField label="Prix" name="labelPrix" value={this.state.labelPrix} onChange={this.handleChange.bind(this)}/>
+                        <TextField label="Prix" name="labelPrix" value={this.state.labelPrix} onChange={this.handleChange.bind(this)} type="number"/>
                         <TextField type="number" label="Surface" name="labelSurface" value={this.state.labelSurface} onChange={this.handleChange.bind(this)}/>
                         <Button style={{marginTop: '1vw'}} onClick={this.saveNewProperty}>Payer</Button>
                     </Grid>

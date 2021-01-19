@@ -49,7 +49,8 @@ class Achat extends Component {
     render() {
         return (
             <div>
-                <p>Achetez un résidence !</p>
+                <h1>Achetez un résidence !</h1>
+                <h2>Voici les résidences disponnibles à la vente</h2>
                 {!this.isLoading ?
                     this.state.propertiesArrayToSale.length ?
                         <this.HouseListBuy data={this.state}/>
@@ -90,22 +91,27 @@ class Achat extends Component {
     HouseListBuy = (props) =>  {
         const classes = styleHouseListToSale();
         return (
-            <Grid container spacing={5}>
+            <Grid container spacing={5} style={{marginLeft:'1vH', marginRight:'1vH'}}>
                 {props.data.propertiesArrayToSale.map( house => (
-                    <Grid item key={house.id}>
-                        <Card className={classes.root}>
+                    <Grid item key={house.id} style={{display: 'flex', alignItems: 'stretch', justifyContent: 'space-between'}}>
+                        <Card className={classes.root} style={{display: 'flex', flexDirection:'column', maxWidth:'17vW', minWidth:'17vW'}}>
                             <CardMedia image={"https://www.thehousedesigners.com/house-plans/images/AdvSearch2-7263.jpg"}
                                        title={house.name} className={classes.media}>
                             </CardMedia>
-                            <CardContent width={"100%"}>
-                                <p>{house.name}</p>
-                                <p>{house.price}</p>
-                                <p>{house.description}</p>
+                            <CardContent width={"100%"} style={{display:'inline-block'}}>
+                                <div style={{display:'flex' ,justifyContent: 'space-between' }}>
+                                    <p><b>{house.name}</b></p>
+                                    <p style={{marginLeft:'9vW'}}><b>Prix</b>: {house.price}Ξ</p>
+                                </div>
+                                <p><b>Mise en vente le</b>: {house.dateUtc}</p>
+                                <p><b>Surface</b>: {house.surface}m²</p>
+                                <p style={{maxWidth: '20vW', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '15vH'}}>{house.description}</p>
                             </CardContent>
-                            <CardActions>
-                                <Button onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
-                                    textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer'}}>
-                                    <LocalAtmIcon></LocalAtmIcon>
+                            <CardActions width={"100%"} style={{marginTop: 'auto'}}>
+                                <Button  onClick={() => this.handleClickOpenSell(house)} style={{backgroundColor: '#3f51b5', border: 'none', color: 'white', padding: '20px', textAlign: 'center',
+                                    textDecoration: 'none', display: 'flex', fontSize: '10px', margin: '4px 2px', cursor: 'pointer', width:'100%'}}>
+                                    <p  style={{marginRight:'10px'}}>Achetez !</p>
+                                    <LocalAtmIcon/>
                                 </Button>
                             </CardActions>
                         </Card>
