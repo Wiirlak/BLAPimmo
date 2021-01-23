@@ -240,7 +240,7 @@ class Vente extends Component {
                         marginBottom: '2vw',
                         padding: '10px'
                     }}>
-                        <TextField label="Label" name="labelName" value={this.state.labelName} onChange={this.handleChange.bind(this)} inputProps={{ maxLength: 30 }}/>
+                        <TextField label="Nom" name="labelName" value={this.state.labelName} onChange={this.handleChange.bind(this)} inputProps={{ maxLength: 30 }}/>
                         <TextField label="Adresse" name="labelAddress" value={this.state.labelAddress} onChange={this.handleChange.bind(this)} inputProps={{ maxLength: 30 }}/>
                         <TextField label="Description" name="labelDescription" value={this.state.labelDescription} onChange={this.handleChange.bind(this)}/>
                         <TextField label="Prix" name="labelPrix" value={this.state.labelPrix} onChange={this.handleChange.bind(this)} type="number"/>
